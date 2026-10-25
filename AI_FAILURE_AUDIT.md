@@ -11,7 +11,7 @@ The project was built as a sequence of small tasks, under these rules:
 - **Contract first.** The shared types (`src/contract.ts`) and the specification (`TASK_DECOMPOSITION.md`) were committed before any logic was generated.
 - **One task per prompt.** Each prompt asked for one module or one concern. The WBS lists H3-T01 to H3-T13 plus H3-AUDIT.
 - **One commit per task.** Each commit used the exact Conventional Commits message given by the task, and staged only the files named in that task.
-- **Checks before commit.** `npm run build` (TypeScript type check plus bundle) were run before each commit where the checks existed. `npm test` (`node --test`) was added to the project later, so the early tasks were not checked with it. A task with a failing check was not committed.
+- **Checks before commit.** `npm run build` (TypeScript type check plus bundle) was run before each commit where the checks existed. `npm test` (`node --test`) was added to the project later, so the early tasks were not checked with it. A task with a failing check was not committed.
 - **Defect fixes as separate commits.** Each defect fix was committed alone, with its own message.
 
 The repository history has 18 commits from the specification (`a03df9f`) to the last fix (`4c17047`). Of these, 13 are task commits and 5 are defect-fix commits.
@@ -126,7 +126,7 @@ Task H3-T01 asked for the specification. The AI described the timer, the file la
 
 The original specification (`a03df9f`) contained three kinds of wrong text:
 
-1. **Wrong timer mechanism.** Section 5 said: "The timer schedules each next tick with `setTimeout`, aligned to the next whole-second boundary of the clock delta." The code uses `requestAnimationFrame` (`src/anti-drift-timer.ts` lines 21 and 26). No whole-second alignment exists.
+1. **Wrong timer mechanism.** The H3-T06 task said: "The timer schedules each next tick with `setTimeout`, aligned to the next whole-second boundary of the clock delta." The code uses `requestAnimationFrame` (`src/anti-drift-timer.ts` lines 21 and 26). No whole-second alignment exists.
 2. **Wrong file names.** The stub list and the task file lists named `src/timer.ts`, `src/inventory.ts`, `src/checkout.ts` and `src/submit-guard.ts`. The modules were created as `src/anti-drift-timer.ts`, `src/inventory-fsm.ts`, `src/checkout-form.ts`, and the double-submit guard is inside `src/checkout-form.ts`. There is no `submit-guard.ts`.
 3. **Wrong guard design.** Acceptance text for H3-T11 said "`submit-guard.ts` is pure: `tryStart()` returns `false` while a request is in flight". The implementation uses `data-state` in `checkout-form.ts`.
 
@@ -152,7 +152,7 @@ The original specification (`a03df9f`) contained three kinds of wrong text:
 - Applied in `90a479a` and `4c17047`: the timer description, file names and guard description now match the code.
 - Process change: the specification and the code should be checked against each other after every task. This check is manual. An automated check could grep every `src/*.ts` path named in the specification and confirm that the file exists.
 
-## 5. Defect HW3-DEF-05: Retry button stays visible after a successful order
+## 5. Defect HW3-DEF-04: Retry button stays visible after a successful order
 
 - **Introduced in:** `c970af2` (`feat(ts): double-submit guard and wiring`, task H3-T11)
 - **Fixed in:** `e3adafe` (`fix(ts): hide retry button after a successful order`)
@@ -201,7 +201,7 @@ These issues were found during the audit. They are not counted in the four defec
 ## 7. Conclusion and lessons
 
 1. **Spec and code drift together.** Two of the four defects (HW3-DEF-02 and HW3-DEF-03) were in the specification, and the code later followed the task prompts instead. A specification written by AI before the code exists needs to be re-checked after each task.
-2. **State must be derived in one place.** Both UI defects (HW3-DEF-01 and HW3-DEF-05) came from setting the button and the retry state in several branches. The fix works, but the same class of bug can come back. Deriving the controls from `data-state` in one function is the safer design.
+2. **State must be derived in one place.** Both UI defects (HW3-DEF-01 and HW3-DEF-04) came from setting the button and the retry state in several branches. The fix works, but the same class of bug can come back. Deriving the controls from `data-state` in one function is the safer design.
 3. **Check the diff, not only the message.** Each fix was checked against its diff. A fix commit can say "re-enable submit" while changing a different line. The diff check caught no mismatch in this audit, but it was needed for each defect.
 4. **Tests cover logic, not every browser behavior.** The inventory state machine and reservation logic have unit tests. The checkout form has none, so its two UI defects were found by a person in DevTools, not by `npm test`. A test file for `checkout-form.ts` would catch this class of bug earlier.
 5. **Evidence must be stated as what was run.** Screenshots and browser runs are listed as user-supplied or automated. No performance number or test count in this report was produced for this document.
