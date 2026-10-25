@@ -101,6 +101,11 @@ export function createCheckoutForm(
       return;
     }
 
+    if (formEl.dataset.state === 'success') {
+      formStatus.textContent = 'Order already placed. Reload the page to order again.';
+      return;
+    }
+
     const raw: CheckoutValues = {
       name: fields.name.input.value,
       phone: fields.phone.input.value,
@@ -131,9 +136,11 @@ export function createCheckoutForm(
     try {
       await options.onSubmit(values);
       setState('success');
+      submitBtn.disabled = false;
       formStatus.textContent = 'Order placed. Thank you.';
     } catch (error: unknown) {
       setState('error');
+      submitBtn.disabled = false;
       retryBtn.hidden = false;
       formStatus.textContent = error instanceof Error ? error.message : 'Something went wrong. Try again.';
     }
