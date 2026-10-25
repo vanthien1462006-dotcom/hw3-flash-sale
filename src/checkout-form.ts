@@ -137,6 +137,7 @@ export function createCheckoutForm(
       await options.onSubmit(values);
       setState('success');
       submitBtn.disabled = false;
+      retryBtn.hidden = true;
       formStatus.textContent = 'Order placed. Thank you.';
     } catch (error: unknown) {
       setState('error');
