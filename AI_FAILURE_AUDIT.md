@@ -11,7 +11,7 @@ The project was built as a sequence of small tasks, under these rules:
 - **Contract first.** The shared types (`src/contract.ts`) and the specification (`TASK_DECOMPOSITION.md`) were committed before any logic was generated.
 - **One task per prompt.** Each prompt asked for one module or one concern. The WBS lists H3-T01 to H3-T13 plus H3-AUDIT.
 - **One commit per task.** Each commit used the exact Conventional Commits message given by the task, and staged only the files named in that task.
-- **Checks before commit.** `npm run build` (TypeScript type check plus bundle) and `npm test` (`node --test`) were run before each commit. A task with a failing check was not committed.
+- **Checks before commit.** `npm run build` (TypeScript type check plus bundle) were run before each commit where the checks existed. `npm test` (`node --test`) was added to the project later, so the early tasks were not checked with it. A task with a failing check was not committed.
 - **Defect fixes as separate commits.** Each defect fix was committed alone, with its own message.
 
 The repository history has 18 commits from the specification (`a03df9f`) to the last fix (`4c17047`). Of these, 13 are task commits and 5 are defect-fix commits.
@@ -22,7 +22,7 @@ Each defect below was found after the task that introduced it was committed. The
 
 - **Introduced in:** `c970af2` (`feat(ts): double-submit guard and wiring`, task H3-T11)
 - **Fixed in:** `638a858` (`fix(ts): re-enable submit after a successful order`)
-- **Evidence:** user-supplied DevTools screenshots `report-screenshots/hw3/hw3-audit-devtools-01.png` (before) and `hw3-audit-devtools-01-fixed.png` (after). The agent did not inspect the image content in this session.
+- **Evidence:** user-supplied DevTools screenshots `report-screenshots/hw3/hw3-audit-devtools-01.png` (before) and `hw3-audit-devtools-01-fixed.png` (after). Before the fix, the submit button has the disabled attribute; after the fix, the attribute is gone and the form shows data-state success.
 
 ### AI Prompt
 
@@ -56,7 +56,6 @@ The button was re-enabled only in `handleRetry`.
 ### Detection Method
 
 - **Detection:** user observation in Chrome DevTools, shown in the screenshots listed above.
-- **Automated re-check (fix only):** a Chrome DevTools Protocol script in the scratchpad (`cdp-def01.mjs`, outside the repository) drove the page through a success and an error scenario, and read `submit-btn.disabled`, `data-state`, `retry-btn.hidden` and the status text. The numbers from that run are not restated in this report.
 - **Diff check:** `git show 638a858` adds `submitBtn.disabled = false;` to both the success and error branches, and adds a success guard that returns with the message "Order already placed. Reload the page to order again." when `data-state` is `success`. This matches the defect description.
 
 ### Engineering Refactor
@@ -77,7 +76,7 @@ Not yet done:
 - **Type:** specification defect. The "AI Generated Code" is specification text.
 - **Introduced in:** `a03df9f` (`docs(spec): define timer, inventory FSM and API contracts`, task H3-T01)
 - **Fixed in:** `2f4357a` (`docs(spec): set sample stock to 10 to match code`)
-- **Evidence:** user-supplied screenshots `report-screenshots/hw3/hw3-audit-evidence-02.png` and `hw3-audit-evidence-02-fixed.png`. The agent did not inspect the image content in this session.
+- **Evidence:** user-supplied screenshots `report-screenshots/hw3/hw3-audit-evidence-02.png` and `hw3-audit-evidence-02-fixed.png`. The before screenshot shows three lines with 50 and mockStock = 10; the after screenshot shows no 50 line in the specification.
 
 ### AI Prompt
 
@@ -117,7 +116,7 @@ A reader or grader who follows the specification would expect 50 units. The demo
 - **Type:** specification defect. The "AI Generated Code" is specification text.
 - **Introduced in:** `a03df9f` (`docs(spec): define timer, inventory FSM and API contracts`, task H3-T01)
 - **Fixed in:** `90a479a` (`docs(spec): describe timer with rAF and actual file names`) and `4c17047` (`docs(spec): point double-submit guard to checkout-form`)
-- **Evidence:** user-supplied screenshots `report-screenshots/hw3/hw3-audit-evidence-03.png` and `hw3-audit-evidence-03-fixed.png`. The agent did not inspect the image content in this session.
+- **Evidence:** user-supplied screenshots `report-screenshots/hw3/hw3-audit-evidence-03.png` and `hw3-audit-evidence-03-fixed.png`. The before screenshot shows the setTimeout line, the wrong file names and the requestAnimationFrame lines in the code; the after screenshot shows no wrong file name and no setTimeout line.
 
 ### AI Prompt
 
@@ -157,7 +156,7 @@ The original specification (`a03df9f`) contained three kinds of wrong text:
 
 - **Introduced in:** `c970af2` (`feat(ts): double-submit guard and wiring`, task H3-T11)
 - **Fixed in:** `e3adafe` (`fix(ts): hide retry button after a successful order`)
-- **Evidence:** user-supplied DevTools screenshots `report-screenshots/hw3/hw3-audit-devtools-04.png` (before) and `hw3-audit-devtools-04-fixed.png` (after). The agent did not inspect the image content in this session.
+- **Evidence:** user-supplied DevTools screenshots `report-screenshots/hw3/hw3-audit-devtools-04.png` (before) and `hw3-audit-devtools-04-fixed.png` (after). Before the fix, the form has data-state success and the retry button has no hidden attribute while it is visible on the page; after the fix, the retry button has the hidden attribute.
 
 ### AI Prompt
 
@@ -178,7 +177,7 @@ In `c970af2`, the error branch showed the retry button, and only `handleRetry` h
 
 ### Risk
 
-- After a successful order, a button that offers "Try again" is misleading. A user could press it and start a second hold, or see the form reset when they expected a completed order.
+- After a successful order, a button that offers "Try again" is misleading. Before e3adafe, pressing it reset the form to idle. A new submit then fails at the reservation check, and the code shows the message "Your reservation is not confirmed yet."
 - The page's state and its controls disagreed, so the screen did not match `data-state`.
 
 ### Detection Method
@@ -197,7 +196,7 @@ In `c970af2`, the error branch showed the retry button, and only `handleRetry` h
 These issues were found during the audit. They are not counted in the four defects, because no fix commit exists for them yet.
 
 - **Latency mismatch.** `TASK_DECOMPOSITION.md` lines 354 and 444 say latency is 400 ms. `src/mock-api.ts` line 11 sets `LATENCY_MS = 800`. The specification has not been updated.
-- **H3-T10 acceptance text.** Lines 382 and 383 of `TASK_DECOMPOSITION.md` describe name length 2 to 80 characters and phone numbers with `+84` or spaces removed. `src/checkout-form.ts` lines 19 and 20 set the name maximum to 60, and `src/sanitize.ts` accepts only a 10-digit number starting with `0`. The specification has not been updated.
+- **H3-T10 acceptance text.** Lines 382 and 383 of `TASK_DECOMPOSITION.md` describe name length 2 to 80 characters and phone numbers with `+84` or spaces removed. `src/checkout-form.ts` line 19 sets the name maximum to 60 and line 20 sets the address maximum to 200, and `src/sanitize.ts` accepts only a 10-digit number starting with `0`. The specification has not been updated.
 
 ## 7. Conclusion and lessons
 
