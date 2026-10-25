@@ -1,1 +1,114 @@
-/* stub: filled in H3-T05 */
+/* Countdown: four units in a row, spaced with gap. */
+#countdown {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-variant-numeric: tabular-nums;
+}
+
+#countdown [data-unit] {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+.unit-label {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+#countdown-done {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--success);
+}
+
+#stock-status {
+  font-weight: 600;
+}
+
+/* Buttons */
+button {
+  min-height: var(--target-min);
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+#hold-btn,
+#submit-btn,
+#retry-btn {
+  width: 100%;
+}
+
+/* Checkout form */
+#checkout-form {
+  display: grid;
+  gap: var(--space-2);
+}
+
+#checkout-form label {
+  font-weight: 600;
+}
+
+input,
+textarea {
+  width: 100%;
+  min-height: var(--target-min);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+}
+
+#checkout-form [id$="-hint"] {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+#checkout-form [id$="-error"] {
+  color: var(--danger);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+#checkout-form [aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+#form-status {
+  font-weight: 600;
+}
+
+/* Form states, driven by data-state on the form. */
+#checkout-form[data-state="submitting"] #submit-btn {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* Overrides the [hidden] rule in reset.css so the retry button shows in the error state. */
+#checkout-form[data-state="error"] #retry-btn {
+  display: inline-block !important;
+}
+
+#checkout-form[data-state="success"] #form-status {
+  color: var(--success);
+}
+
+/* Focus indicator for every interactive element. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}

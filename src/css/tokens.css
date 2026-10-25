@@ -1,1 +1,32 @@
-/* stub: filled in H3-T05 */
+/*
+ * Design tokens. This is the only file that may contain hex or rgb values.
+ * Contrast (checked in H3-T05): text pairs at least 4.5:1,
+ * borders, focus ring and UI boundaries at least 3:1.
+ */
+:root {
+  --bg: #f6f6f4;
+  --surface: #ffffff;
+  --text: #1c1c1c;
+  --text-muted: #555555;
+  --border: #767676;
+  --accent: #1f4fa3;
+  --accent-text: #ffffff;
+  --focus-ring: #0b3d91;
+  --danger: #b42318;
+  --success: #137333;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --radius-md: 8px;
+  --target-min: 24px;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-xl: 1.5rem;
+}
