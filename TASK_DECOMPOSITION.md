@@ -392,7 +392,7 @@ Each task is one prompt, one atomic commit, one concern. Commit messages are exa
 - **Files:** `src/checkout-form.ts`, `src/main.ts`.
 - **Depends on:** H3-T06A, H3-T09, H3-T10.
 - **Acceptance:**
-  - `submit-guard.ts` is pure: `tryStart()` returns `false` while a request is in flight, and `finish()` clears the flag.
+  - The double-submit guard lives in `checkout-form.ts`: `handleSubmit` returns early while `data-state` is `submitting`.
   - The form sets `data-state` through `submitting`, `success` and `error`. The submit button is disabled while a request is in flight.
   - Retry reuses the same `holdId`.
   - One listener per container and event type. Event delegation only.
