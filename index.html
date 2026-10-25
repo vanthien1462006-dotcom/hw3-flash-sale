@@ -1,13 +1,72 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>hw3-flash-sale</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Demo flash sale page for a fictional product. No real transactions are made.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/src/css/reset.css">
+    <link rel="stylesheet" href="/src/css/tokens.css">
+    <link rel="stylesheet" href="/src/css/layout.css">
+    <link rel="stylesheet" href="/src/css/components.css">
+    <title>Flash Sale 11.11 (demo)</title>
   </head>
   <body>
-    <div id="app"></div>
+    <a href="#main-content">Skip to main content</a>
+
+    <header>
+      <h1>Flash Sale 11.11 (demo)</h1>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+      <section id="countdown-section" aria-labelledby="countdown-title">
+        <h2 id="countdown-title">Sale starts in</h2>
+        <p id="countdown" role="timer">
+          <span data-unit="days">00</span> <span class="unit-label">days</span>
+          <span data-unit="hours">00</span> <span class="unit-label">hours</span>
+          <span data-unit="minutes">00</span> <span class="unit-label">minutes</span>
+          <span data-unit="seconds">00</span> <span class="unit-label">seconds</span>
+        </p>
+        <p id="countdown-done" hidden>The sale is live.</p>
+        <p>Starts <time id="sale-start" datetime="2026-11-10T17:00:00Z">00:00, 11 November 2026 (Vietnam time, UTC+7)</time></p>
+      </section>
+
+      <section id="product" aria-labelledby="product-title" data-hold-ms="60000">
+        <h2 id="product-title">Demo headphones</h2>
+        <p>A fictional product used only to demonstrate this page.</p>
+        <p id="stock-status" role="status"></p>
+        <button type="button" id="hold-btn">Reserve for 60 seconds</button>
+      </section>
+
+      <section id="checkout" aria-labelledby="checkout-title">
+        <h2 id="checkout-title">Checkout</h2>
+        <form id="checkout-form" data-state="idle" novalidate>
+          <label for="name">Full name</label>
+          <input id="name" name="name" type="text" maxlength="60" required autocomplete="name" aria-describedby="name-hint name-error">
+          <p id="name-hint">As shown on your ID.</p>
+          <p id="name-error" hidden></p>
+
+          <label for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" maxlength="10" autocomplete="tel" aria-describedby="phone-hint phone-error">
+          <p id="phone-hint">10 digits, starting with 0</p>
+          <p id="phone-error" hidden></p>
+
+          <label for="address">Delivery address</label>
+          <textarea id="address" name="address" maxlength="200" rows="3" autocomplete="street-address" aria-describedby="address-hint address-error"></textarea>
+          <p id="address-hint">House number, street, district, city.</p>
+          <p id="address-error" hidden></p>
+
+          <button type="submit" id="submit-btn">Place order</button>
+          <button type="button" id="retry-btn" hidden>Try again</button>
+          <p id="form-status" role="status"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>This is a demo page. The product is fictional and no real transaction takes place.</p>
+    </footer>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
