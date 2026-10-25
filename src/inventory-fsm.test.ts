@@ -7,6 +7,14 @@ function makeState(status: InventoryStatus, stock: number, holdExpiresAt: number
   return { status, stock, holdExpiresAt };
 }
 
+// Narrows a transition result for tests that expect a valid transition.
+function must(state: InventoryState | null): InventoryState {
+  if (state === null) {
+    throw new Error('expected a valid transition, got null');
+  }
+  return state;
+}
+
 const HOLD_MS = 60_000;
 
 test('AVAILABLE + HOLD with stock > 0 moves to HOLDING and sets holdExpiresAt = now + holdMs', () => {
@@ -84,4 +92,28 @@ test('transition never mutates the input state', () => {
   const next = transition(before, { type: 'HOLD', now: 0, holdMs: HOLD_MS });
   assert.deepEqual(before, snapshot);
   assert.notEqual(next, before);
+});
+
+test('race: a second HOLD sent right after the first one is rejected (returns null)', () => {
+  const first = must(transition(makeState('AVAILABLE', 5), { type: 'HOLD', now: 1000, holdMs: HOLD_MS }));
+  assert.equal(transition(first, { type: 'HOLD', now: 1001, holdMs: HOLD_MS }), null);
+});
+
+test('race: EXPIRE sent before the hold window ends is rejected, so the hold is not expired early', () => {
+  const held = must(transition(makeState('AVAILABLE', 5), { type: 'HOLD', now: 1000, holdMs: HOLD_MS }));
+  assert.equal(transition(held, { type: 'EXPIRE', now: 30_000 }), null);
+});
+
+test('race: REJECT arriving after CONFIRM is rejected (returns null), so a purchase is not rolled back', () => {
+  const held = must(transition(makeState('AVAILABLE', 5), { type: 'HOLD', now: 1000, holdMs: HOLD_MS }));
+  const purchased = must(transition(held, { type: 'CONFIRM' }));
+  assert.equal(purchased.status, 'PURCHASED');
+  assert.equal(transition(purchased, { type: 'REJECT' }), null);
+});
+
+test('race: HOLD, REJECT, HOLD recomputes holdExpiresAt from the new now', () => {
+  const first = must(transition(makeState('AVAILABLE', 5), { type: 'HOLD', now: 1000, holdMs: HOLD_MS }));
+  const rejected = must(transition(first, { type: 'REJECT' }));
+  const second = transition(rejected, { type: 'HOLD', now: 9000, holdMs: HOLD_MS });
+  assert.deepEqual(second, makeState('HOLDING', 5, 9000 + HOLD_MS));
 });
