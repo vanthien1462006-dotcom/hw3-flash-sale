@@ -22,7 +22,7 @@ Constants used by the spec:
 | --- | --- | --- |
 | Sale start (UTC) | `2026-11-10T17:00:00Z` | 00:00 on 11/11/2026, Vietnam time (UTC+7) |
 | Hold duration | `60000` ms | `data-hold-ms` on `#hold-btn` |
-| Sample stock | `50` units | Choice made in this document; fictional sample data |
+| Sample stock | `10` units | Choice made in this document; fictional sample data |
 | Mock API latency | `400` ms | Choice made in this document; injected so tests can change it |
 
 Time rules: store the sale start as ISO 8601 UTC in the `datetime` attribute. Convert it with `Date.parse` to epoch milliseconds before any math.
@@ -349,7 +349,7 @@ Each task is one prompt, one atomic commit, one concern. Commit messages are exa
 - **Files:** `src/mock-api.ts`.
 - **Depends on:** H3-T03.
 - **Acceptance:**
-  - In-memory stock, initial value 50, held in the module.
+  - In-memory stock, initial value 10, held in the module.
   - Each reserve creates a hold with a server-side expiry. Expired holds return their stock lazily on the next call.
   - Latency is configurable and defaults to 400 ms.
   - `mockReserve` rejects when stock is 0 or when the test-only failure flag is set.
@@ -441,7 +441,7 @@ Each task is one prompt, one atomic commit, one concern. Commit messages are exa
 2. **`data-hold-ms` location.** This document puts it on `#hold-btn`. The brief could also mean `section#product`.
 3. **Added guards** in section 4: `SYNC` with negative or non-integer stock, and `HOLD` with `holdMs <= 0`, return `null`.
 4. **Hold countdown.** The contract has no element for the remaining hold time. Proposal: an extra `span` inside `#product`, outside `role="status"`, so the status is not announced every second.
-5. **Sample values.** Stock 50 and latency 400 ms are my choices.
+5. **Sample values.** Stock 10 and latency 400 ms are my choices.
 6. **Commit message case.** The rule says summaries are lowercase, but `docs(audit): AI failure mode report` has uppercase `AI`. This document keeps the message exactly as given, because the rule says to use the task's message exactly.
 7. **Node version.** This machine has Node v24.14.1, which runs `.ts` files without a flag. `npm test` has not been run yet, so this is not yet verified.
 
