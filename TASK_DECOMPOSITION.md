@@ -79,10 +79,10 @@ export type TickHandler = (remainingMs: number) => void;
 Function signatures. Each function lives in the module named in the comment and must match this shape exactly.
 
 ```ts
-// src/inventory.ts
+// src/inventory-fsm.ts
 export function transition(state: InventoryState, event: InventoryEvent): InventoryState | null;
 
-// src/timer.ts
+// src/anti-drift-timer.ts
 export function computeRemaining(targetMs: number, nowMs: number): number;
 export function createAntiDriftTimer(durationMs: number, onTick: TickHandler, clock?: Clock): () => void;
 
@@ -102,14 +102,14 @@ export interface ReservationApi {
 Semantics:
 
 - `computeRemaining(targetMs, nowMs)` returns `Math.max(0, targetMs - nowMs)`. It is never negative.
-- `createAntiDriftTimer(durationMs, onTick, clock = Date.now)` records `start = clock()` when created. Each tick computes `remaining = max(0, durationMs - (clock() - start))` and calls `onTick(remaining)`. When `remaining` reaches 0, it makes the last call with `0` and stops by itself. The returned function stops the timer early and clears any pending timeout.
+- `createAntiDriftTimer(durationMs, onTick, clock = Date.now)` records `start = clock()` when created. Each tick computes `remaining = max(0, durationMs - (clock() - start))` and calls `onTick(remaining)`. When `remaining` reaches 0, it makes the last call with `0` and stops by itself. The returned function stops the timer early and cancels any pending animation frame.
 - `mockReserve` resolves after the mock latency. It rejects when the stock is 0 or when a test-only failure flag is set.
 - `mockRelease` returns the stock after the release. Calling it again with an unknown or already released `holdId` is a no-op that returns the current stock.
 - `mockConfirm` rejects when the `holdId` is unknown or its hold has expired.
 
 ---
 
-## 4. Inventory transition table (H3-T07, `src/inventory.ts`)
+## 4. Inventory transition table (H3-T07, `src/inventory-fsm.ts`)
 
 Every pair not listed here returns `null`. A `null` result means the event is ignored and the state does not change.
 
@@ -144,7 +144,7 @@ Known gap in the table: `HOLDING + SYNC` with `stock === 0` stays `HOLDING`. The
 
 ## 5. Countdown and timer
 
-- **H3-T06, `src/timer.ts`:** `computeRemaining` and `createAntiDriftTimer` as described in section 3. The timer schedules each next tick with `setTimeout`, aligned to the next whole-second boundary of the clock delta. It never uses `setInterval` and never decrements a counter.
+- **H3-T06, `src/anti-drift-timer.ts`:** `computeRemaining` and `createAntiDriftTimer` as described in section 3. The timer schedules each next frame with `requestAnimationFrame`, computes the remaining time from the `Date.now()` delta, and stops when remaining is 0. It never uses `setInterval` and never decrements a counter.
 - **H3-T06A, `src/countdown.ts`:** reads `time#sale-start`, parses its `datetime` with `Date.parse`, and throws a clear `Error` if the element is missing or the value is invalid. It writes the four `span[data-unit]` values (`days`, `hours`, `minutes`, `seconds`) with `textContent`, zero-padded. When the remaining time reaches 0, it sets the `role="timer"` text to a "sale is live" message. It stops the timer on `pagehide`.
 - The hold expiry in H3-T09 reuses `createAntiDriftTimer(holdMs, ...)`. Its last tick sends `EXPIRE`.
 
@@ -258,7 +258,7 @@ Each task is one prompt, one atomic commit, one concern. Commit messages are exa
 - **Files:**
   - Remove the Vite demo: `src/counter.ts`, `src/style.css`, `src/assets/` (unused template assets).
   - Replace `src/main.ts` with a stub that contains `export {};`.
-  - Create stubs (each `export {};`): `src/timer.ts`, `src/inventory.ts`, `src/mock-api.ts`, `src/reservation.ts`, `src/countdown.ts`, `src/checkout.ts`, `src/submit-guard.ts`.
+  - Create stubs (each `export {};`): `src/anti-drift-timer.ts`, `src/inventory-fsm.ts`, `src/mock-api.ts`, `src/reservation.ts`, `src/countdown.ts`, `src/checkout-form.ts`.
   - Create empty CSS stubs: `src/css/reset.css`, `src/css/tokens.css`, `src/css/layout.css`, `src/css/form.css`.
   - Add `"test": "node --test \"src/**/*.test.ts\""` to `package.json` scripts.
 - **Depends on:** H3-T01.
@@ -307,12 +307,12 @@ Each task is one prompt, one atomic commit, one concern. Commit messages are exa
 
 ### H3-T06: anti-drift timer
 
-- **Files:** `src/timer.ts`, `src/timer.test.ts`.
+- **Files:** `src/anti-drift-timer.ts`, `src/anti-drift-timer.test.ts`.
 - **Depends on:** H3-T03.
 - **Acceptance:**
   - `computeRemaining` clamps at 0.
   - `createAntiDriftTimer` computes from the clock delta, calls `onTick` with the remaining time, makes a final call with `0`, and stops itself.
-  - The returned stop function clears the pending timeout.
+  - The returned stop function cancels the pending animation frame.
   - No `setInterval`. No decrementing counter.
   - Tests use an injected fake clock and irregular steps to show no drift.
   - `npm test` and `npm run build` pass. Test output is recorded in the session.
@@ -334,7 +334,7 @@ Each task is one prompt, one atomic commit, one concern. Commit messages are exa
 
 ### H3-T07: pure inventory state machine
 
-- **Files:** `src/inventory.ts`.
+- **Files:** `src/inventory-fsm.ts`.
 - **Depends on:** H3-T03.
 - **Acceptance:**
   - `transition` implements the table in section 4, including the added guards if the user accepts them.
@@ -374,7 +374,7 @@ Each task is one prompt, one atomic commit, one concern. Commit messages are exa
 
 ### H3-T10: checkout validation and sanitization
 
-- **Files:** `src/checkout.ts`, `src/checkout.test.ts`.
+- **Files:** `src/sanitize.ts`, `src/checkout-form.ts`.
 - **Depends on:** H3-T02.
 - **Acceptance:**
   - `validateCheckout(input: unknown)` narrows the input and returns either `{ ok: true, value }` or `{ ok: false, errors }`.
@@ -389,7 +389,7 @@ Each task is one prompt, one atomic commit, one concern. Commit messages are exa
 
 ### H3-T11: double-submit guard and wiring
 
-- **Files:** `src/submit-guard.ts`, `src/main.ts`.
+- **Files:** `src/checkout-form.ts`, `src/main.ts`.
 - **Depends on:** H3-T06A, H3-T09, H3-T10.
 - **Acceptance:**
   - `submit-guard.ts` is pure: `tryStart()` returns `false` while a request is in flight, and `finish()` clears the flag.
@@ -403,7 +403,7 @@ Each task is one prompt, one atomic commit, one concern. Commit messages are exa
 
 ### H3-T12: inventory tests
 
-- **Files:** `src/inventory.test.ts`.
+- **Files:** `src/inventory-fsm.test.ts`.
 - **Depends on:** H3-T07.
 - **Acceptance:**
   - Double hold: `HOLD` from `HOLDING` returns `null`.
