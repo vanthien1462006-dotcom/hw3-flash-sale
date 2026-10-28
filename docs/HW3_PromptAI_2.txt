@@ -1,0 +1,902 @@
+
+● Trước khi viết tài liệu, tôi đối chiếu từng lỗi với git: kiểm tra lịch sử
+  commit, diff của các commit sửa, và code gốc của các commit sinh lỗi. Đồng
+  thời tôi kiểm tra các đường dẫn ảnh có thật không.
+
+  Listed 1 directory, ran 3 shell commands (ctrl+o to expand)
+  ⎿  Referenced file TASK_DECOMPOSITION.md
+  ⎿  Read src\checkout-form.ts (167 lines)
+  ⎿  Read
+     ..\..\..\AppData\Local\Temp\claude\c--Users-USER-Documents-LAB2-WEBDEV-hw3-
+     flash-sale\3a1ffd1a-bbaa-4fe0-b54b-9ef431f9fec6\scratchpad\cdp-def01.mjs
+     (137 lines)
+  ⎿  Read src\reservation.test.ts (276 lines)
+  ⎿  Read src\inventory-fsm.test.ts (120 lines)
+
+● Phần kiểm tra lần trước của tôi có lỗi bộ lọc grep (ký tự +- bị loại), nên
+  chưa thể kết luận về diff của 90a479a. Tôi kiểm tra lại đầy đủ.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Các diff sửa đều khớp mô tả, và các chuỗi lỗi cũ không còn trong spec. Trước
+  khi viết mục "open issues", tôi kiểm tra thêm hai mismatch sẽ nêu trong tài
+  liệu.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Đã kiểm tra xong: 4 lỗi đều khớp diff. Tôi viết tài liệu.
+
+● Write(AI_FAILURE_AUDIT.md)
+  ⎿  Wrote 208 lines to AI_FAILURE_AUDIT.md
+      1 # AI Failure Audit: High-Concurrency Flash-Sale Engine (HW3)
+      3 This report records the defects that really happened in this repo
+        sitory while AI assistance (Claude) generated the specification a
+        commit that introduced it, and the commit that fixed it. The diff
+         minimum.
+      4
+         HW3-DEF-03). For these, the "AI Generated Code" field contains s
+        pecification text, and the detection method uses `Select-String`
+        on.
+      7 ## 1. Introduction: decompo
+     … +352 lines (ctrl+o to expand)
+
+● Tôi kiểm tra nốt mục H3-T10 trong spec trước khi commit, vì tài liệu có nêu
+  điều này.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Spec H3-T10 ghi tên 2–80 ký tự và số điện thoại có dấu cách/+84, còn code giới
+  hạn tên tối đa 60 và số điện thoại 0\d{9}. Tôi sửa mục 6 cho khớp với những
+  gì đã kiểm tra.
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      197  These issues were found during the audit. They are not counted
+            in the four defects, because no fix commit exists for them ye
+           t.
+      198  
+      199  - **Latency mismatch.** `TASK_DECOMPOSITION.md` lines 354 and 
+           444 say latency is 400 ms. `src/mock-api.ts` line 11 sets `LAT
+           ENCY_MS = 800`. The specification has not been updated.
+      200 -- **H3-T10 acceptance text.** The specification's acceptance c
+          -riteria for H3-T10 describe validation rules that the code doe
+          -s not implement. The code is the newer version.               
+      200 +- **H3-T10 acceptance text.** Lines 382 and 383 of `TASK_DECOM
+          +POSITION.md` describe name length 2 to 80 characters and phone
+          + numbers with `+84` or spaces removed. `src/checkout-form.ts` 
+          +lines 19 and 20 set the name maximum to 60, and `src/sanitize.
+          +ts` accepts only a 10-digit number starting with `0`. The spec
+          +ification has not been updated.                               
+      201  
+      202  ## 7. Conclusion and lessons
+      203  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Written for: giảng viên và người review repo HW3.
+
+  Đã viết và commit AI_FAILURE_AUDIT.md với message docs(audit): AI failure mode
+  report (hash 35138a4). Chưa push.
+
+  Kiểm tra trước khi viết (git):
+  - HW3-DEF-01: c970af2 đặt submitBtn.disabled = true và không bật lại ở nhánh
+    success/error. 638a858 thêm disabled = false vào cả hai nhánh và thêm
+    success guard. Khớp.
+  - HW3-DEF-05: c970af2 chỉ ẩn retry trong handleRetry. e3adafe thêm
+    retryBtn.hidden = true vào nhánh success. Khớp.
+  - HW3-DEF-02: a03df9f có 3 chỗ ghi stock 50. 2f4357a đổi đúng 3 chỗ đó thành
+    10. Hiện grep tìm 50 trong spec trả về 0. Khớp.
+  - HW3-DEF-03: a03df9f có setTimeout, tên file
+    timer.ts/inventory.ts/checkout.ts/submit-guard.ts. 90a479a và 4c17047 sửa
+    các chỗ này. Hiện grep cho các chuỗi đó trả về 0. Khớp.
+
+  Không diff nào lệch mô tả nên tôi không dừng. Vì bộ lọc grep lần đầu của tôi
+  bỏ sót dòng, tôi đã chạy lại diff đầy đủ trước khi kết luận.
+
+  Nội dung tài liệu: phần giới thiệu về quy trình, 4 lỗi theo template 5 trường,
+  đánh dấu DEF-02 và DEF-03 là lỗi spec, phần kết luận với bài học, và một mục
+  "open issues" không tính là lỗi. Mục đó nêu hai mismatch đã kiểm tra: latency
+  400 ms trong spec so với 800 ms trong code, và phần acceptance H3-T10 trong
+  spec không khớp code.
+
+  Chưa xác minh:
+  - Nội dung các ảnh screenshot: tôi chỉ xác nhận file có tồn tại, chưa mở xem.
+    Tài liệu ghi chúng là bằng chứng do người dùng cung cấp.
+  - Số liệu từ script CDP trong scratchpad: không chép lại vào tài liệu.
+  - Chuỗi click chính xác dẫn tới DEF-05 (success khi retry còn hiện): tài liệu
+    ghi rõ là chưa tái hiện.
+  - Các kiểm tra thủ công (triple-click, đo 60 giây, DevTools): không làm lại
+    trong phiên này.
+  - npm run build và npm test không được chạy, vì đây là thay đổi chỉ có tài
+    liệu và prompt không yêu cầu check.
+
+  CLAUDE.md vẫn là file untracked và không được commit.
+
+> Đọc Agent.md và project-rules.md. Chỉ sửa file AI_FAILURE_AUDIT.md. Không sửa
+  file khác.
+
+  Mục tiêu: sửa các câu khẳng định không chính xác trong AI_FAILURE_AUDIT.md
+  (commit 35138a4). Mỗi cặp dưới đây là văn bản cũ (old) và văn bản mới (new).
+  Dùng Edit, thay đúng đoạn cũ bằng đoạn mới. Nếu đoạn cũ không tìm thấy đúng
+  một lần, DỪNG và báo tôi, không tự đoán.
+
+  Sửa 1 (mục 1, dòng 14):
+  old: "- Checks before commit. npm run build (TypeScript type check plus
+  bundle) and npm test (node --test) were run before each commit. A task with a
+  failing check was not committed."
+  new: "- Checks before commit. Each task was checked with the checks available
+  at that point: npm run build (TypeScript type check plus bundle), and `npthe
+  test script existed. A task with afailing check was not committed."
+
+  Sửa 2 (mục 2, DEF-01):
+  old: "hw3-audit-devtools-01-fixed.png (afte the image content in this
+  session." new: "hw3-audit-devtools-01-fixed.png (after). Before the fix,
+  #submit-btn has the disabled attribute; after the fix, the attribute is
+  absent and the form shows data-state=\"success\"."
+
+  Sửa 3 (mục 2, DEF-01): xóa hẳn dòng bắt đầu (fix only):**" kể cả dấu xuống
+  dòng ở cuối
+  ws the three 50 lines and mockStock = 10; the after screenshot shows no 50
+  line in the specification."
+
+  Sửa 5 (mục 4, DEF-03):
+  old: "hw3-audit-evidence-03-fixed.png. The agent did not inspect the image
+  content in this session." new: "hw3-audit-evidence-03-fixed.png. The before
+  screenshot shows the setTimeout line, the wrong file names and the
+  requestAnimationFrame lines in the code; the after screenshot shows neither
+  the wrong file names nor
+  setTimeout."
+
+  Sửa 6 (mục 5, DEF-05):
+  old: "hw3-audit-devtools-04-fixed.png (after). The agent did not inspect the
+  image content in this session." new: "hw3-audit-devtools-04-fixed.png (aftews
+  data-state=\"success\" and a retry-btn
+  orm reset when they expected a completed order."
+  new: "Before e3adafe, pressing it reset the form to idle, and a new submit
+  then failed with \"Your reservation is not confirmed yet.\""
+
+  Sửa 8 (mục 6, open issues):
+  old: "src/checkout-form.ts lines 19 and 20 set the name maximum to 60, and
+  src/sanitize.ts"
+  new: "src/checkout-form.ts line 19 sets the name maximum to 60 and line 20
+  sets the address maximum to 200, and
+  src/sanitize.ts"
+
+  Sau khi sửa, kiểm tra bằng grep trên AI_FAIL không có dòng nào cho các chuỗi
+  sau: "didnot inspect", "cdp-def01", "were run before each commit", "lines 19
+  and 20", "start a second hold".
+
+  Commit:
+  git add AI_FAILURE_AUDIT.md
+  git commit -m "docs(audit): correct statements in AI failure report"
+
+  Không push. Báo cáo bằng tiếng Việt: danh sách các sửa đã áp dụng, kết quả
+  grep, và hash commit.
+
+● Tôi đọc file hiện tại trước, vì một số đoạn "cũ" trong yêu cầu có vẻ bị cắt
+  hoặc lẫn chữ.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Tôi dừng lại, chưa sửa gì. Commit 35138a4 vẫn nguyên, không có commit mới.
+
+  Lý do: yêu cầu nói nếu đoạn cũ không tìm thấy đúng một lần thì phải dừng. Một
+  số đoạn cũ và đoạn mới bị lỗi chữ trong bản dán:
+
+  ┌─────┬────────────────────────────────────────────────────────────────────┐
+  │ Sửa │                             Tình trạng                             │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │     │ Đoạn cũ khớp đúng 1 lần. Đoạn mới bị lỗi: "npthe test script       │
+  │ 1   │ existed", "afailing check". Không thể áp dụng vì sẽ ghi chữ vô     │
+  │     │ nghĩa vào tài liệu.                                                │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 2   │ Đoạn cũ không tồn tại. File có "(after). The agent did not         │
+  │     │ inspect...", còn bản dán là "(afte the image content".             │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 3   │ Không có đoạn cũ rõ ràng. Đoạn mới bị lỗi ("xóa hẳn dòng bắt đầu   │
+  │     │ (fix only):**").                                                   │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 4   │ Không có trong bản dán.                                            │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │     │ Đoạn cũ khớp đúng 1 lần. Đoạn mới khẳng định nội dung ảnh (ví dụ   │
+  │ 5   │ "the before screenshot shows the setTimeout line"), mà tôi chưa mở │
+  │     │  ảnh để xác nhận.                                                  │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 6   │ Đoạn cũ khớp đúng 1 lần. Đoạn mới bị cắt và lỗi chữ ("aftews ...", │
+  │     │  "orm reset ...").                                                 │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │     │ Đoạn cũ bị cắt ("orm reset when they expected..."). Đoạn mới khẳng │
+  │ 7   │  định "a new submit then failed with 'Your reservation is not      │
+  │     │ confirmed yet.'", chưa được kiểm chứng trong phiên này.            │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 8   │ Đoạn cũ khớp đúng 1 lần. Đoạn mới đúng với code: checkout-form.ts  │
+  │     │ dòng 19 là tên 60, dòng 20 là địa chỉ 200.                         │
+  └─────┴────────────────────────────────────────────────────────────────────┘
+
+  Các chuỗi kiểm tra sau khi sửa, đo trên file hiện tại: "Checks before commit"
+  1 lần, "lines 19 and 20" 1 lần, "start a second hold" 1 lần, "were run before
+  each commit" có trong dòng 14. Các chuỗi này sẽ đổi khi sửa xong.
+
+  Để tôi làm tiếp, bạn gửi lại các cặp cũ/mới đã làm sạch cho Sửa 1, 2, 3, 4, 6,
+  7. Với Sửa 5 và 6, nếu muốn ghi nội dung ảnh vào tài liệu, tôi cần mở ảnh
+  report-screenshots/hw3/ để xác nhận trước. Nếu bạn muốn, tôi có thể làm việc
+  này và báo lại kết quả.
+
+> Đọc Agent.md và project-rules.md. Chỉ sửa AI_FAILURE_AUDIT.md. Không sửa file
+  khác.
+
+  Mục tiêu: sửa các câu khẳng định không chính xác trong AI_FAILURE_AUDIT.md
+  (commit 35138a4).
+
+  Quy tắc: với mỗi sửa, dùng Edit để thay đoạn cũ (old) bằng đoạn mới (new).
+  Đoạn cũ phải khớp đúng một lần. Nếu không khớp đúng một lần, DỪNG toàn bộ,
+  không áp dụng sửa nào, và báo tôi đoạn nào lỗi.
+
+  Trước Sửa 5 và Sửa 6: mở bằng Read các ảnh
+  report-screenshots\hw3\hw3-audit-evidence-03.png,
+  hw3-audit-evidence-03-fixed.png, hw3-audit-devtools-04.png và
+  hw3-audit-devtools-04-fixed.png. Chỉ dùng mô tả trong đoạn mới nếu ảnh xác
+  nhận đúng. Nếu không, DỪNG và báo tôi.
+
+  Sửa 1 (mục 1):
+  old: and npm test (node --test) were run before each commit.
+  new: were run before each commit where the checks existed. npm test (node
+  --test) was added to the project later, so the early tasks were not checked
+  with it.
+
+  Sửa 2 (mục 2, DEF-01):
+  old: hw3-audit-devtools-01-fixed.png (after). The agent did not inspect the
+  image content in this session. new: hw3-audit-devtools-01-fixed.png (after).
+  Before the fix, the submit button has the disabled attribute; after the fix,
+  the attribute is gone and the form shows data-state success.
+
+  Sửa 3 (mục 2, DEF-01): xóa hẳn dòng có chữ "Automated re-check (fix only)",
+  kể cả dấu xuống dòng.
+
+  Sửa 4 (mục 3, DEF-02):
+  old: hw3-audit-evidence-02-fixed.png. The agent did not inspect the image
+  content in this session. new: hw3-audit-evidence-02-fixed.png. The before
+  screenshot shows three lines with 50 and mockStock = 10; the after screenshot
+  shows no 50 line in the specification.
+
+  Sửa 5 (mục 4, DEF-03):
+  old: hw3-audit-evidence-03-fixed.png. The agent did not inspect the image
+  content in this session. new: hw3-audit-evidence-03-fixed.png. The before
+  screenshot shows the setTimeout line, the wrong file names and the
+  requestAnimationFrame lines in the code; the after screenshot shows no wrong
+  file name and no setTimeout line.
+
+  Sửa 6 (mục 5, DEF-05):
+  old: hw3-audit-devtools-04-fixed.png (after). The age new:
+  hw3-audit-devtools-04-fixed.png (after). Before the fix, the form has
+  data-state success and the retry button has no hidden attribute while it is
+  visible on the page; after the fix, the retry button has the hidden
+  attribute.
+
+  Sửa 7 (mục 5, rủi ro DEF-05):
+  old: A user could press it and start a second hold, or see the form reset
+  when they expected a completed order.
+  new: Before e3adafe, pressing it reset the form to idle. A new submit then
+  fails at the reservation check, and the code shows the message "Your
+  reservation is not confirmed yet."
+
+  Sửa 8 (mục 6):
+  old: src/checkout-form.ts lines 19 and 20 set the name maximum to 60, and
+  src/sanitize.ts
+  new: src/checkout-form.ts line 19 sets the name maximum to 60 and line 20
+  sets the address maximum to 200, and src/sanitize.ts
+
+  Sau khi sửa xong, chạy grep trên AI_FAILURE_AUDIT.md. Kết quả đúng là không
+  có dòng nào cho các chuỗi sau: "did not inspect", "cdp-def01", "lines 19 and
+  20", "start a second hold", "were run before each commit".
+
+  Commit:
+  git add AI_FAILURE_AUDIT.md
+  git commit -m "docs(audit): correct statements in AI failure report"
+
+  Không push. Báo cáo bằng tiếng Việt: danh sách sửa đã áp dụng, kết quả grep,
+  và hash commit. Nếu có sửa bị bỏ qua, nêu rõ sửa nào và lý do.
+
+● Trước khi sửa, tôi mở bốn ảnh được yêu cầu và kiểm tra thêm hai ảnh còn lại,
+  vì các đoạn mới cũng mô tả nội dung ảnh. Đồng thời tôi kiểm tra các khẳng định
+  trong Sửa 1 và Sửa 7 trong code/git.
+
+  Read 8 files, ran 1 shell command (ctrl+o to expand)
+
+● Ảnh xác nhận các mô tả trong Sửa 2, 4, 5 và 6. Sửa 1 và Sửa 7 đều đúng về
+  code. Riêng Sửa 1 có một điểm cần báo: npm test đã có từ commit 8992045
+  (H3-T02), không phải sau đó. Trước khi sửa, tôi kiểm tra số lần khớp của mọi
+  đoạn cũ để đảm bảo không sửa một nửa.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Tất cả đoạn cũ khớp đúng một lần. Sửa 6 trong bản dán bị cắt ở "The age", nên
+  tôi dùng câu đầy đủ "The agent did not inspect the image content in this
+  session." làm đoạn cũ. Nếu dùng đoạn cắt, phần còn lại của câu sẽ bị sót trong
+  file. Tôi áp dụng các sửa.
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      11  - **Contract first.** The shared types (`src/contract.ts`) and 
+          the specification (`TASK_DECOMPOSITION.md`) were committed befo
+          re any logic was generated.
+      12  - **One task per prompt.** Each prompt asked for one module or 
+          one concern. The WBS lists H3-T01 to H3-T13 plus H3-AUDIT.
+      13  - **One commit per task.** Each commit used the exact Conventio
+          nal Commits message given by the task, and staged only the file
+          s named in that task.
+      14 -- **Checks before commit.** `npm run build` (TypeScript type ch
+         -eck plus bundle) and `npm test` (`node --test`) were run before
+         - each commit. A task with a failing check was not committed.   
+      14 +- **Checks before commit.** `npm run build` (TypeScript type ch
+         +eck plus bundle) were run before each commit where the checks e
+         +xisted. `npm test` (`node --test`) was added to the project lat
+         +er, so the early tasks were not checked with it. A task with a 
+         +failing check was not committed.                               
+      15  - **Defect fixes as separate commits.** Each defect fix was com
+          mitted alone, with its own message.
+      16  
+      17  The repository history has 18 commits from the specification (`
+          a03df9f`) to the last fix (`4c17047`). Of these, 13 are task co
+          mmits and 5 are defect-fix commits.
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      22  
+      23  - **Introduced in:** `c970af2` (`feat(ts): double-submit guard 
+          and wiring`, task H3-T11)
+      24  - **Fixed in:** `638a858` (`fix(ts): re-enable submit after a s
+          uccessful order`)
+      25 -- **Evidence:** user-supplied DevTools screenshots `report-scre
+         -enshots/hw3/hw3-audit-devtools-01.png` (before) and `hw3-audit-
+         -devtools-01-fixed.png` (after). The agent did not inspect the i
+         -mage content in this session.                                  
+      25 +- **Evidence:** user-supplied DevTools screenshots `report-scre
+         +enshots/hw3/hw3-audit-devtools-01.png` (before) and `hw3-audit-
+         +devtools-01-fixed.png` (after). Before the fix, the submit butt
+         +on has the disabled attribute; after the fix, the attribute is 
+         +gone and the form shows data-state success.                    
+      26  
+      27  ### AI Prompt
+      28  
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Removed 1 line
+      56  ### Detection Method
+      57  
+      58  - **Detection:** user observation in Chrome DevTools, shown in 
+          the screenshots listed above.
+      59 -- **Automated re-check (fix only):** a Chrome DevTools Protocol
+         - script in the scratchpad (`cdp-def01.mjs`, outside the reposit
+         -ory) drove the page through a success and an error scenario, an
+         -d read `submit-btn.disabled`, `data-state`, `retry-btn.hidden` 
+         -and the status text. The numbers from that run are not restated
+         - in this report.                                               
+      59  - **Diff check:** `git show 638a858` adds `submitBtn.disabled =
+           false;` to both the success and error branches, and adds a suc
+          cess guard that returns with the message "Order already placed.
+           Reload the page to order again." when `data-state` is `success
+          `. This matches the defect description.
+      60  
+      61  ### Engineering Refactor
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      76  - **Type:** specification defect. The "AI Generated Code" is sp
+          ecification text.
+      77  - **Introduced in:** `a03df9f` (`docs(spec): define timer, inve
+          ntory FSM and API contracts`, task H3-T01)
+      78  - **Fixed in:** `2f4357a` (`docs(spec): set sample stock to 10 
+          to match code`)
+      79 -- **Evidence:** user-supplied screenshots `report-screenshots/h
+         -w3/hw3-audit-evidence-02.png` and `hw3-audit-evidence-02-fixed.
+         -png`. The agent did not inspect the image content in this sessi
+         -on.                                                            
+      79 +- **Evidence:** user-supplied screenshots `report-screenshots/h
+         +w3/hw3-audit-evidence-02.png` and `hw3-audit-evidence-02-fixed.
+         +png`. The before screenshot shows three lines with 50 and mockS
+         +tock = 10; the after screenshot shows no 50 line in the specifi
+         +cation.                                                        
+      80  
+      81  ### AI Prompt
+      82  
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      116  - **Type:** specification defect. The "AI Generated Code" is s
+           pecification text.
+      117  - **Introduced in:** `a03df9f` (`docs(spec): define timer, inv
+           entory FSM and API contracts`, task H3-T01)
+      118  - **Fixed in:** `90a479a` (`docs(spec): describe timer with rA
+           F and actual file names`) and `4c17047` (`docs(spec): point do
+           uble-submit guard to checkout-form`)
+      119 -- **Evidence:** user-supplied screenshots `report-screenshots/
+          -hw3/hw3-audit-evidence-03.png` and `hw3-audit-evidence-03-fixe
+          -d.png`. The agent did not inspect the image content in this se
+          -ssion.                                                        
+      119 +- **Evidence:** user-supplied screenshots `report-screenshots/
+          +hw3/hw3-audit-evidence-03.png` and `hw3-audit-evidence-03-fixe
+          +d.png`. The before screenshot shows the setTimeout line, the w
+          +rong file names and the requestAnimationFrame lines in the cod
+          +e; the after screenshot shows no wrong file name and no setTim
+          +eout line.                                                    
+      120  
+      121  ### AI Prompt
+      122  
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      156  
+      157  - **Introduced in:** `c970af2` (`feat(ts): double-submit guard
+            and wiring`, task H3-T11)
+      158  - **Fixed in:** `e3adafe` (`fix(ts): hide retry button after a
+            successful order`)
+      159 -- **Evidence:** user-supplied DevTools screenshots `report-scr
+          -eenshots/hw3/hw3-audit-devtools-04.png` (before) and `hw3-audi
+          -t-devtools-04-fixed.png` (after). The agent did not inspect th
+          -e image content in this session.                              
+      159 +- **Evidence:** user-supplied DevTools screenshots `report-scr
+          +eenshots/hw3/hw3-audit-devtools-04.png` (before) and `hw3-audi
+          +t-devtools-04-fixed.png` (after). Before the fix, the form has
+          + data-state success and the retry button has no hidden attribu
+          +te while it is visible on the page; after the fix, the retry b
+          +utton has the hidden attribute.                               
+      160  
+      161  ### AI Prompt
+      162  
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      177  
+      178  ### Risk
+      179  
+      180 -- After a successful order, a button that offers "Try again" i
+          -s misleading. A user could press it and start a second hold, o
+          -r see the form reset when they expected a completed order.    
+      180 +- After a successful order, a button that offers "Try again" i
+          +s misleading. Before e3adafe, pressing it reset the form to id
+          +le. A new submit then fails at the reservation check, and the 
+          +code shows the message "Your reservation is not confirmed yet.
+          +"                                                             
+      181  - The page's state and its controls disagreed, so the screen d
+           id not match `data-state`.
+      182  
+      183  ### Detection Method
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      196  These issues were found during the audit. They are not counted
+            in the four defects, because no fix commit exists for them ye
+           t.
+      197  
+      198  - **Latency mismatch.** `TASK_DECOMPOSITION.md` lines 354 and 
+           444 say latency is 400 ms. `src/mock-api.ts` line 11 sets `LAT
+           ENCY_MS = 800`. The specification has not been updated.
+      199 -- **H3-T10 acceptance text.** Lines 382 and 383 of `TASK_DECOM
+          -POSITION.md` describe name length 2 to 80 characters and phone
+          - numbers with `+84` or spaces removed. `src/checkout-form.ts` 
+          -lines 19 and 20 set the name maximum to 60, and `src/sanitize.
+          -ts` accepts only a 10-digit number starting with `0`. The spec
+          -ification has not been updated.                               
+      199 +- **H3-T10 acceptance text.** Lines 382 and 383 of `TASK_DECOM
+          +POSITION.md` describe name length 2 to 80 characters and phone
+          + numbers with `+84` or spaces removed. `src/checkout-form.ts` 
+          +line 19 sets the name maximum to 60 and line 20 sets the addre
+          +ss maximum to 200, and `src/sanitize.ts` accepts only a 10-dig
+          +it number starting with `0`. The specification has not been up
+          +dated.                                                        
+      200  
+      201  ## 7. Conclusion and lessons
+      202  
+
+● Đã áp dụng cả 8 sửa. Bây giờ tôi chạy grep kiểm tra và commit.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Đã commit caf961f (docs(audit): correct statements in AI failure report). Chưa
+  push. Chỉ AI_FAILURE_AUDIT.md thay đổi: 7 dòng thêm, 8 dòng xóa.
+
+  Sửa đã áp dụng (8/8)
+  1. Mục 1: thay câu về kiểm tra trước commit. Xem lưu ý bên dưới.
+  2. DEF-01: thêm mô tả trạng thái disabled và data-state trước/sau khi sửa. Ảnh
+     devtools-01 và devtools-01-fixed xác nhận.
+  3. DEF-01: xóa dòng "Automated re-check (fix only)".
+  4. DEF-02: thay câu mô tả ảnh. Ảnh evidence-02 và evidence-02-fixed xác nhận.
+  5. DEF-03: thay câu mô tả ảnh. Ảnh evidence-03 và evidence-03-fixed xác nhận.
+  6. DEF-05: thay câu mô tả ảnh. Ảnh devtools-04 (retry hiển thị) và
+     devtools-04-fixed (retry có hidden) xác nhận.
+  7. DEF-05, rủi ro: thay câu "start a second hold". Đã kiểm tra trong code:
+     handleRetry đặt idle, main.ts dòng 53 ném "Your reservation is not
+     confirmed yet.", và canConfirm() là false sau khi mua.
+  8. Mục 6: tách rõ dòng 19 (tên tối đa 60) và dòng 20 (địa chỉ tối đa 200).
+
+  Lưu ý về các đoạn bạn gửi
+  - Sửa 6: đoạn cũ trong bản dán bị cắt ở "The age". Tôi dùng câu đầy đủ làm
+    đoạn cũ, vì đoạn cắt sẽ để lại phần thừa trong file. Đoạn cũ đầy đủ khớp
+    đúng một lần.
+  - Sửa 1: npm test không được thêm sau. Script này đã có từ 8992045 (H3-T02),
+    và file test stub cũng có từ commit đó. Câu mới chỉ đúng nếu so với commit
+    spec a03df9f. Bạn có thể muốn đổi thành "added in H3-T02".
+  - Sửa 1: sau khi bỏ "and npm test", câu thành "npm run build (...) were run
+    before each commit", chủ ngữ số ít nhưng động từ "were" số nhiều. Nên sửa
+    thành "was run".
+
+  Kết quả grep trên file hiện tại
+  - "did not inspect": không có dòng nào.
+  - "cdp-def01": không có dòng nào.
+  - "lines 19 and 20": không có dòng nào.
+  - "start a second hold": không có dòng nào.
+  - "were run before each commit": còn 1 dòng (dòng 14). Câu mới của Sửa 1 vẫn
+    chứa cụm này. Kết quả này khác với mong đợi "không có dòng nào" của bạn. Tôi
+    không đổi câu, vì đó là nội dung bạn yêu cầu.
+
+  Tôi không chạy npm run build hay npm test, vì thay đổi chỉ có tài liệu.
+  CLAUDE.md vẫn chưa được commit.
+
+> Đọc Agent.md và project-rules.md. Chỉ sửa AI_FAILURE_AUDIT.md. Không sửa file
+  khác.
+
+  Mục tiêu: sửa ba chỗ sai quan trọng trong AI_FAILURE_AUDIT.md (commit
+  caf961f).
+
+  Quy tắc: dùng Edit để thay từng đoạn cũ (old) bằng đoạn mới (new). Mỗi đoạn
+  cũ phải khớp đúng một lần. Nếu một đoạn không khớp đúng một lần, DỪNG toàn
+  bộ, không áp dụng sửa nào, và báo tôi đoạn nào lỗi.
+
+  Sửa 1 (mục 5, tiêu đề): đánh số lại lỗi thứ tư từ DEF-05 thành DEF-04.
+  old: ## 5. Defect HW3-DEF-05:
+  new: ## 5. Defect HW3-DEF-04:
+
+  Sửa 2 (mục 7, bài học 2): đổi số lỗi tương ứng.
+  old: (HW3-DEF-01 and HW3-DEF-05)
+  new: (HW3-DEF-01 and HW3-DEF-04)
+
+  Sửa 3 (mục 1, dòng 14): sửa động từ cho đúng chủ ngữ số ít.
+  old: bundle) were run before each commit where
+  new: bundle) was run before each commit where
+
+  Sửa 4 (mục 4, DEF-03): câu trích dẫn nằm ở task H3-T06 của spec, không phải
+  "Section 5".
+  old: Section 5 said:
+  new: The H3-T06 task said:
+
+  Sau khi sửa xong, chạy grep trên AI_FAILURE_AUDIT.md:
+  - grep -n "DEF-05" phải không có dòng nào.
+  - grep -n "were run before each commit" phải không có dòng nào.
+  - grep -n "Section 5" phải không có dòng nào.
+  - grep -n "DEF-04" phải có đúng 3 dòng: tiêu đề mục 5, dòng trong mục 7, và
+  dòng ghi "Introduced in" hoặc tương đương nếu có. Báo số dòng thực tế, không
+  tự ước lượng.
+
+  Commit (chỉ thêm đúng file này):
+  git add AI_FAILURE_AUDIT.md
+  git commit -m "docs(audit): fix defect numbering and wording in AI failure
+  report"
+
+  Không push. Báo cáo bằng tiếng Việt: danh sách sửa đã áp dụng, kết quả từng
+  lệnh grep, và hash commit. Nếu có sửa bị bỏ qua, nêu rõ sửa nào và lý do.
+
+● Trước khi sửa, tôi kiểm tra số lần khớp của từng đoạn cũ và toàn bộ các chuỗi
+  grep sẽ dùng để báo cáo.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bốn đoạn cũ đều khớp đúng một lần, nên tôi áp dụng cả bốn.
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      152  - Applied in `90a479a` and `4c17047`: the timer description, f
+           ile names and guard description now match the code.
+      153  - Process change: the specification and the code should be che
+           cked against each other after every task. This check is manual
+           . An automated check could grep every `src/*.ts` path named in
+            the specification and confirm that the file exists.
+      154  
+      155 -## 5. Defect HW3-DEF-05: Retry button stays visible after a su
+          -ccessful order                                                
+      155 +## 5. Defect HW3-DEF-04: Retry button stays visible after a su
+          +ccessful order                                                
+      156  
+      157  - **Introduced in:** `c970af2` (`feat(ts): double-submit guard
+            and wiring`, task H3-T11)
+      158  - **Fixed in:** `e3adafe` (`fix(ts): hide retry button after a
+            successful order`)
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      201  ## 7. Conclusion and lessons
+      202  
+      203  1. **Spec and code drift together.** Two of the four defects (
+           HW3-DEF-02 and HW3-DEF-03) were in the specification, and the 
+           code later followed the task prompts instead. A specification 
+           written by AI before the code exists needs to be re-checked af
+           ter each task.
+      204 -2. **State must be derived in one place.** Both UI defects (HW
+          -3-DEF-01 and HW3-DEF-05) came from setting the button and the 
+          -retry state in several branches. The fix works, but the same c
+          -lass of bug can come back. Deriving the controls from `data-st
+          -ate` in one function is the safer design.                     
+      204 +2. **State must be derived in one place.** Both UI defects (HW
+          +3-DEF-01 and HW3-DEF-04) came from setting the button and the 
+          +retry state in several branches. The fix works, but the same c
+          +lass of bug can come back. Deriving the controls from `data-st
+          +ate` in one function is the safer design.                     
+      205  3. **Check the diff, not only the message.** Each fix was chec
+           ked against its diff. A fix commit can say "re-enable submit" 
+           while changing a different line. The diff check caught no mism
+           atch in this audit, but it was needed for each defect.
+      206  4. **Tests cover logic, not every browser behavior.** The inve
+           ntory state machine and reservation logic have unit tests. The
+            checkout form has none, so its two UI defects were found by a
+            person in DevTools, not by `npm test`. A test file for `check
+           out-form.ts` would catch this class of bug earlier.
+      207  5. **Evidence must be stated as what was run.** Screenshots an
+           d browser runs are listed as user-supplied or automated. No pe
+           rformance number or test count in this report was produced for
+            this document.
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      11  - **Contract first.** The shared types (`src/contract.ts`) and 
+          the specification (`TASK_DECOMPOSITION.md`) were committed befo
+          re any logic was generated.
+      12  - **One task per prompt.** Each prompt asked for one module or 
+          one concern. The WBS lists H3-T01 to H3-T13 plus H3-AUDIT.
+      13  - **One commit per task.** Each commit used the exact Conventio
+          nal Commits message given by the task, and staged only the file
+          s named in that task.
+      14 -- **Checks before commit.** `npm run build` (TypeScript type ch
+         -eck plus bundle) were run before each commit where the checks e
+         -xisted. `npm test` (`node --test`) was added to the project lat
+         -er, so the early tasks were not checked with it. A task with a 
+         -failing check was not committed.                               
+      14 +- **Checks before commit.** `npm run build` (TypeScript type ch
+         +eck plus bundle) was run before each commit where the checks ex
+         +isted. `npm test` (`node --test`) was added to the project late
+         +r, so the early tasks were not checked with it. A task with a f
+         +ailing check was not committed.                                
+      15  - **Defect fixes as separate commits.** Each defect fix was com
+          mitted alone, with its own message.
+      16  
+      17  The repository history has 18 commits from the specification (`
+          a03df9f`) to the last fix (`4c17047`). Of these, 13 are task co
+          mmits and 5 are defect-fix commits.
+
+● Update(AI_FAILURE_AUDIT.md)
+  ⎿  Added 1 line, removed 1 line
+      126  
+      127  The original specification (`a03df9f`) contained three kinds o
+           f wrong text:
+      128  
+      129 -1. **Wrong timer mechanism.** Section 5 said: "The timer sched
+          -ules each next tick with `setTimeout`, aligned to the next who
+          -le-second boundary of the clock delta." The code uses `request
+          -AnimationFrame` (`src/anti-drift-timer.ts` lines 21 and 26). N
+          -o whole-second alignment exists.                              
+      129 +1. **Wrong timer mechanism.** The H3-T06 task said: "The timer
+          + schedules each next tick with `setTimeout`, aligned to the ne
+          +xt whole-second boundary of the clock delta." The code uses `r
+          +equestAnimationFrame` (`src/anti-drift-timer.ts` lines 21 and 
+          +26). No whole-second alignment exists.                        
+      130  2. **Wrong file names.** The stub list and the task file lists
+            named `src/timer.ts`, `src/inventory.ts`, `src/checkout.ts` a
+           nd `src/submit-guard.ts`. The modules were created as `src/ant
+           i-drift-timer.ts`, `src/inventory-fsm.ts`, `src/checkout-form.
+           ts`, and the double-submit guard is inside `src/checkout-form.
+           ts`. There is no `submit-guard.ts`.
+      131  3. **Wrong guard design.** Acceptance text for H3-T11 said "`s
+           ubmit-guard.ts` is pure: `tryStart()` returns `false` while a 
+           request is in flight". The implementation uses `data-state` in
+            `checkout-form.ts`.
+      132  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Đã áp dụng cả 4 sửa và commit d32dcec (docs(audit): fix defect numbering and
+  wording in AI failure report). Chưa push. Chỉ AI_FAILURE_AUDIT.md thay đổi: 4
+  dòng thêm, 4 dòng xóa.
+
+  Sửa đã áp dụng (4/4)
+  1. Mục 5, tiêu đề: ## 5. Defect HW3-DEF-05: → ## 5. Defect HW3-DEF-04:.
+  2. Mục 7, bài học 2: (HW3-DEF-01 and HW3-DEF-05) → (HW3-DEF-01 and
+     HW3-DEF-04).
+  3. Mục 1, dòng 14: were run before each commit where → was run before each
+     commit where.
+  4. Mục 4, DEF-03: Section 5 said: → The H3-T06 task said:.
+
+  Cả bốn đoạn cũ đều khớp đúng một lần trước khi sửa, nên không có sửa nào bị bỏ
+  qua.
+
+  Kết quả grep (đo trên file sau khi sửa)
+  - grep -n "DEF-05": không có dòng nào. Đạt.
+  - grep -n "were run before each commit": không có dòng nào. Đạt.
+  - grep -n "Section 5": không có dòng nào. Đạt.
+  - grep -n "DEF-04": 2 dòng, không phải 3 như mong đợi:
+    - dòng 155: tiêu đề mục 5;
+    - dòng 204: bài học 2 trong mục 7.
+
+    Dòng "Introduced in" của mục 5 không chứa chuỗi "DEF-04", nên không được
+    tính. Tôi không thêm dòng để đủ 3.
+
+  Lưu ý
+  - Tên lỗi trong các tin nhắn trước của bạn là HW3-DEF-05. Sau sửa này, tài
+    liệu dùng DEF-04, nên không khớp với mã lỗi bạn đang theo dõi. Nếu mã trong
+    ticket vẫn là DEF-05, bạn có thể muốn giữ lại tên đó.
+  - Tôi không chạy npm run build hay npm test, vì thay đổi chỉ có tài liệu.
+  - CLAUDE.md vẫn là file untracked và không được commit.
+
+> Đọc Agent.md, project-rules.md và TASK_DECOMPOSITION.md. Chỉ tạo hoặc sửa
+  README.md ở thư mục gốc repo hw3-flash-sale, bằng tiếng Anh. Không sửa file
+  khác.
+
+  Bối cảnh: repo chưa có README.md. Hãy tạo mới README.md, không sao chép
+  README mẫu của Vite.
+
+  Trước khi viết, đọc các nguồn sau để kiểm tra:
+  - package.json: xác nhận các script "dev", "build", "preview", "test".
+  - src/inventory-fsm.ts: lấy đúng tên trạng thái và sự kiện cho bảng FSM.
+  Không tự bịa.
+  - src/anti-drift-timer.ts: xác nhận đồng hồ dùng Date.now() delta và
+  requestAnimationFrame.
+  - src/reservation.ts và src/mock-api.ts: xác nhận cơ chế giữ hàng, hoàn hàng
+  và hết hạn.
+  - src/checkout-form.ts và src/sanitize.ts: xác nhận double-submit guard và
+  sanitize.
+
+  Nội dung README.md:
+
+  1. Title: "Flash-Sale Demo" (hoặc tên tương đương).
+  2. Mô tả ngắn một câu: flash-sale demo with a zero-drift countdown, an
+  optimistic inventory lock and a guarded checkout.
+  3. How to run, mỗi lệnh một dòng trong khối code:
+     - npm install
+     - npm run dev (serves at http://localhost:5173)
+     - npm run build
+     - npm run preview (serves at http://localhost:4173)
+     - npm test
+  4. Design:
+     - Bảng FSM: liệt kê đủ các trạng thái và sự kiện từ src/inventory-fsm.ts.
+  Với mỗi sự kiện, ghi trạng thái đầu và trạng thái sau khi chuyển. Nếu code có
+  trạng thái hoặc sự kiện không có trong bảng, thêm vào. Nếu bảng không khớp
+  code, DỪNG và báo tôi.
+     - Countdown: giải thích vì sao setInterval bị trôi (drift) và vì sao dùng
+  Date.now() delta với requestAnimationFrame.
+     - Optimistic reservation: giữ hàng trước, hoàn hàng khi thất bại, hết hạn
+  theo thời gian.
+     - Double-submit guard: dựa trên data-state tr
+     - Date.now() có thể nhảy khi đồng hồ hệ thống thay đổi.
+     - Mock API là module chạy trong trình duyệt, lưu trong bộ nhớ, không phải
+  server thật. Hết hạn giữ hàng chạy bằng setTimeout trong trình duyệt.
+     - Không có thanh toán thật.
+     - Các file test không được tsc kiểm tra kiểu, vì thiếu @types/node. Ghi
+  đúng như vậy, không nói là test đã được kiểm tra kiểu.
+  6. Measurements: để trống hoàn toàn. Không tự điền số drift hay điểm
+  Lighthouse. Ghi một dòng: "Measured by the author; not filled in this file."
+
+  Không ghi bất kỳ kết quả test, điểm Lighthouse, FPS hay số đo nào mà phiên
+  này không tạo ra.
+
+  Kiểm tra: không chạy npm run build hay npm test trừ khi cần. Nếu không chạy,
+  báo rõ "không chạy" trong báo cáo.
+
+  Commit (chỉ thêm đúng file này):
+  git add README.md
+  git commit -m "docs(readme): document flash-sale design and checks"
+
+  Không push. Báo cáo bằng tiếng Việt:
+  - danh sách trạng thái và sự kiện FSM đã đưa vào bảng, và nguồn từng dòng;
+  - các chỗ README khác với code, nếu có;
+  - trạng thái các mục đã kiểm tra và chưa kiểm tra;
+  - hash commit.
+
+● Bản dán có vài chỗ bị cắt hoặc lạc vị trí. Trước khi viết, tôi đọc các file
+  nguồn để đối chiếu từng khẳng định. Tôi cũng kiểm tra README.md đã tồn tại
+  chưa.
+
+  Read 7 files, ran 1 shell command (ctrl+o to expand)
+
+● Các file nguồn đã đọc xong. Trước khi viết, tôi kiểm tra thêm các khẳng định
+  về guard trong main.ts, cách hiển thị (textContent), cấu hình tsconfig,
+  @types/node và thời điểm bán hàng.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Các khẳng định đã được xác minh. Tôi viết README.md bằng tiếng Anh, bám theo
+  code và không ghi số đo nào.
+
+● Write(README.md)
+  ⎿  Wrote 110 lines to README.md
+       1 # Flash-Sale Demo
+       2
+       3 A flash-sale demo with an anti-drift countdown, an optimistic in
+         ventory hold and a guarded checkout.
+       4
+       6
+       7 ```bash
+       8 npm install
+       9 npm run dev
+      10 npm run build
+     … +166 lines (ctrl+o to expand)
+
+● README đã viết xong. Tôi rà lại và thấy một câu trong mục "Limits" còn thiếu:
+  SYNC ở HOLDING và PURCHASED nhận mọi giá trị stock, kể cả số âm, không chỉ số
+  không nguyên. Tôi sửa lại cho đúng với code.
+
+● Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+       97  - The mock API is in memory. Reloading the page resets stock t
+           o 10.
+       98  - A confirm failure rolls the state back to `AVAILABLE`. The m
+           essage then says that the hold expired, and the user must hold
+            again. Pressing "Try again" after this does not confirm the i
+           tem.
+       99  - A `SYNC` with stock 0 while `HOLDING` is kept in `HOLDING` (
+           see the table above).
+      100 -- The added guards for invalid `SYNC` stock values are not imp
+          -lemented. A non-integer stock value is not rejected.          
+      100 +- The added guards for invalid `SYNC` stock values are not imp
+          +lemented. A `SYNC` in `HOLDING` or `PURCHASED` accepts any sto
+          +ck value, including negative numbers and non-integers. In `AVA
+          +ILABLE` and `SOLD_OUT`, a non-integer value greater than 0 is 
+          +also accepted.                                                
+      101  
+      102  ## Tests
+      103  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Đã tạo README.md và commit 1ad5dcb (docs(readme): document flash-sale design
+  and checks). Chưa push. Chỉ README.md được thêm: 110 dòng.
+
+  Không chạy: npm run build, npm test, npm run dev, npm run preview, npm
+  install. Các lệnh trong README chưa được chạy trong phiên này. Port 5173 và
+  4173 là mặc định của Vite, tôi không xác nhận bằng cách chạy.
+
+  Bảng FSM (nguồn src/inventory-fsm.ts, src/contract.ts)
+  - Trạng thái, từ contract.ts dòng 1: AVAILABLE, HOLDING, PURCHASED, SOLD_OUT.
+  - Sự kiện, từ contract.ts dòng 9–14: HOLD, EXPIRE, REJECT, CONFIRM, SYNC.
+  - HOLD → HOLDING: dòng 7–11.
+  - EXPIRE → AVAILABLE: dòng 13–17.
+  - REJECT → AVAILABLE: dòng 19–23.
+  - CONFIRM → PURCHASED: dòng 25–29.
+  - SYNC ở HOLDING, PURCHASED, AVAILABLE, SOLD_OUT: dòng 38–39, 41–42, 44–51,
+    53–57.
+
+  Bảng khớp code, nên không phải dừng lại. Mọi cặp (trạng thái, sự kiện) không
+  hợp lệ đều được ghi là "không có chuyển", vì code trả về null.
+
+  Chỗ README khác yêu cầu hoặc khác code
+  1. "zero-drift" đổi thành "anti-drift". Chưa có phép đo nào chứng minh drift
+     bằng 0, và README tự nêu Date.now() có thể nhảy khi đồng hồ hệ thống đổi.
+  2. Bản dán bị thiếu mục 5 (nhảy từ 4 sang 6). Tôi không tự thêm nội dung cho
+     mục này. Bullet "Date.now() có thể nhảy" tôi đặt dưới phần Countdown.
+     Bullet về double-submit bị cắt, nên tôi viết theo code.
+  3. Latency trong README là 800 ms (src/mock-api.ts dòng 11). Spec
+     TASK_DECOMPOSITION.md vẫn ghi 400 ms, mâu thuẫn đã có từ trước.
+  4. Tôi thêm mục "Limits" không có trong yêu cầu, dựa trên code: rAF không chạy
+     ở tab nền, confirm lỗi làm "Try again" không xác nhận được, SYNC với stock
+     0 giữ nguyên HOLDING, và các guard SYNC chưa được cài.
+  5. Mục Measurements chỉ có đúng một dòng: "Measured by the author; not filled
+     in this file."
+
+  Đã kiểm tra bằng đọc file và grep
+  - package.json: đủ 4 script dev, build, preview, test.
+  - src/anti-drift-timer.ts: dùng Date.now làm clock mặc định và
+    requestAnimationFrame. Không có setInterval hay performance.now trong src.
+  - src/reservation.ts, src/mock-api.ts: giữ hàng, hoàn hàng, hết hạn và confirm
+    đều khớp mô tả.
+  - src/checkout-form.ts, src/main.ts: guard 1 dựa trên data-state, guard 2 dựa
+    trên canConfirm().
+  - src/sanitize.ts: normalizeText và validatePhone khớp mô tả.
+  - Không có innerHTML, outerHTML, insertAdjacentHTML hay document.write trong
+    src.
+  - tsconfig.json có exclude cho test. node_modules/@types/node không có, nên
+    README ghi test không được kiểm tra kiểu.
+
+  Chưa kiểm tra
+  - Chưa chạy bất kỳ lệnh nào trong README.
+  - Chưa kiểm tra hành vi rAF khi tab nền. Mục này chỉ dựa trên đặc tính đã biết
+    của trình duyệt.
+  - Không có kết quả test, điểm Lighthouse, FPS hay số đo drift nào trong
+    README.
+
+  CLAUDE.md vẫn là file untracked và không được commit.
